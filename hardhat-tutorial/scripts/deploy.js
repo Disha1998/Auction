@@ -19,4 +19,4 @@ main()
     process.exit(1);
   });
 
-  // Auction contract deployed to 0x245B7d00068aC0E293eAC1014Bb3270a140ff818
+  // Auction contract deployed to 0x6616B3A6F66EF50d3bD0e147A8286B1Ca8Ef988b

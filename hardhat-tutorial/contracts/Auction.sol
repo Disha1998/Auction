@@ -12,22 +12,23 @@ contract Auction {
         address[] bidders;
         uint256 auctionStartTime;
         uint256 auctionEndTime;
-        
     }
     uint256 public numOfAuction;
-
     mapping(uint256 => AuctionAgreement) public auctions;
 
-    function createAuctionContract(address payable _owner, string memory _title) public payable {
+    function createAuctionContract(address payable _owner, string memory _title)
+        public
+        payable
+    {
         require(msg.sender != address(0), "invalid address");
         AuctionAgreement storage auctionAgreement = auctions[numOfAuction];
         auctionAgreement.auctionId = numOfAuction;
         auctionAgreement.title = _title;
         auctionAgreement.owner = _owner;
         auctionAgreement.msp = msg.value;
+        auctionAgreement.auctionStartTime = block.timestamp;
         auctionAgreement.auctionEnd = false;
         // auctionAgreement.auctionStartTime = block.timestamp;
-
         numOfAuction++;
     }
 
