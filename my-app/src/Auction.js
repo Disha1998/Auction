@@ -86,6 +86,29 @@ export default function Auction() {
         alert('MSP  deposited successfully.');
     }
 
+    // This is second function for StartAuction(StartTime)
+    async function handleSubmit(id) {
+        console.log('id-----', id);
+        // alert('function called handlesubmit')
+        // e.preventDefault();
+        try {
+            const signer = await getProviderOrSigner(true);
+            const escroContract = getAuctionContractInstance(signer);
+            let auction = await escroContract.auctions(id);
+            console.log('==auction===',auction);
+            const actn = new ParsedAgreement(id, auction.starttime);
+            console.log('actn===', actn);
+
+            console.log('escroContract===', escroContract);
+
+            const tx = await escroContract.startAuction(clientAddress, auctionEndTime);
+            console.log(`Transaction hash: ${tx.hash}`);
+            return actn;
+        } catch (err) {
+            console.error(err, '--------------------');
+        }
+    }
+
     const startAuction = async (id) => {
         console.log(id, '--id');
         const signer = await getProviderOrSigner(true);
@@ -232,14 +255,13 @@ export default function Auction() {
         setTotalNumOfAuctions(agreement.toNumber())
         console.log(agreement, 'num of auction');
     }
-
-
+ 
     console.log(StartAuction, '--StartAuction');
     return (
         <>
             <div>
                 <h1>
-                    Auction by Di
+                    Auction by Dis
                 </h1>
             </div>
             <div>Owner : {clientAddress}</div>
@@ -285,7 +307,7 @@ export default function Auction() {
                                     <h4>MSP : {evryauction.msp / 1000000000000000000} Ether</h4>
                                     <div >
                                         <button style={{ margin: "20px" }}
-                                            onClick={startAuction}
+                                            onClick={handleSubmit}
                                         >Start Auction</button>
 
                                         <button>Participate in auction</button>
@@ -305,10 +327,7 @@ export default function Auction() {
     )
 }
 
-
-
-
-
+// From Chat GPT------------
 // function StartAuction({ auctionId, auctionEndTime }) {
 //     const [status, setStatus] = useState('');
 //     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -331,4 +350,46 @@ export default function Auction() {
 //             <div>{status}</div>
 //         </div>
 //     );
+// }
+
+
+
+// 2nd try From Chat GPT------------------------------------
+
+
+// function StartAuction({ contract }) {
+//   const [auctionId, setAuctionId] = useState('');
+//   const [auctionEndTime, setAuctionEndTime] = useState('');
+
+//   async function handleSubmit(e) {
+//     e.preventDefault();
+//     try {
+//       const tx = await contract.startAuction(auctionId, auctionEndTime);
+//       console.log(`Transaction hash: ${tx.hash}`);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   }
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <label>
+//         Auction ID:
+//         <input
+//           type="text"
+//           value={auctionId}
+//           onChange={e => setAuctionId(e.target.value)}
+//         />
+//       </label>
+//       <label>
+//         Auction End Time:
+//         <input
+//           type="text"
+//           value={auctionEndTime}
+//           onChange={e => setAuctionEndTime(e.target.value)}
+//         />
+//       </label>
+//       <button type="submit">Start Auction</button>
+//     </form>
+//   );
 // }
