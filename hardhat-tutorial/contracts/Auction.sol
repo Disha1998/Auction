@@ -26,13 +26,13 @@ contract Auction {
         auctionAgreement.title = _title;
         auctionAgreement.owner = _owner;
         auctionAgreement.msp = msg.value;
-        auctionAgreement.auctionStartTime = block.timestamp;
         auctionAgreement.auctionEnd = false;
         // auctionAgreement.auctionStartTime = block.timestamp;
         numOfAuction++;
     }
 
     function startAuction(uint256 _auctionId, uint256 _auctionEndTime) public {
+        
         require(
             auctions[_auctionId].owner == msg.sender,
             "you are not owner of this auction"
@@ -43,6 +43,7 @@ contract Auction {
     }
 
     function bid(uint256 _auctionId) public payable {
+        require(auctions[_auctionId].owner != msg.sender,"Owner can't make a bid");
         require(
             auctions[_auctionId].auctionStartTime <= block.timestamp &&
                 auctions[_auctionId].auctionEndTime >= block.timestamp,

@@ -9,7 +9,9 @@ export default function Auction() {
     const [everyAuction, setEveryAuction] = useState([]);
     const [StartAuction, setStartAuction] = useState();
     const [auctionEndTime, setAuctionEndTime] = useState();
-    console.log(auctionEndTime);
+    const [bid, setBid] = useState();
+
+    // console.log(auctionEndTime);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false)
     const [msp, setMsp] = useState(0);
@@ -119,13 +121,21 @@ export default function Auction() {
             })
         }
     }, []);
+
+
+
     const fetchAuctionById = async (id) => {
         // console.log('erntered fetch by id', id);
         try {
             const provider = await getProviderOrSigner();
             const escroContract = getAuctionContractInstance(provider);
             let auction = await escroContract.auctions(id);
-            console.log(auction);
+            
+            
+            // escroContract.bids().then(bids => {
+            //     console.log('bids--',bids);
+            // });
+            console.log('auction===', auction);
             // console.log(new Date(auction.auctionStartTime.toNumber()))
             // console.log(auction.auctionStartTime.toNumber());
             const actn = new ParsedAgreement(id, auction.owner, auction.title,
@@ -164,6 +174,15 @@ export default function Auction() {
         // console.log(agreement, 'num of auction');
     }
     // console.log(StartAuction, '--StartAuction');
+
+    const makeAbid = async (id) => {
+        const signer = await getProviderOrSigner(true);
+        const escroContract = getAuctionContractInstance(signer);
+        let tx = await escroContract.bid(id, { value: ethers.utils.parseEther(bid) });
+        await tx.wait();
+
+    }
+
     return (
         <>
             <div>
@@ -187,11 +206,12 @@ export default function Auction() {
             <div>
                 <h2>Created Auctions</h2>                {
                     everyAuction && everyAuction.map((evryauction) => {
+                        console.log('evryauction==', evryauction);
                         return (
                             <>
                                 <div style={{ marginLeft: "", marginTop: "50px", border: "1px solid grey", display: "inline-block", padding: "2% 5%" }} className='container offset-2 col-5'>
-                                    <p>Agreement Id : {evryauction.agreeId}</p>
-                                    <p>Owner: {evryauction.owner}</p>
+                                    <p>Agreement Id : {evryauction?.agreeId}</p>
+                                    <p>Owner: {evryauction?.owner}</p>
                                     <p>Start Time:{evryauction?.starttime}
                                     </p>
                                     <p>End Time:{evryauction?.endtime}
@@ -204,14 +224,26 @@ export default function Auction() {
                                             getUinxTime(e.target.value)
                                         }
                                     />
-                                    <h3>Title : {evryauction.title}</h3>
-                                    <h4>MSP : {evryauction.msp / 1000000000000000000} Ether</h4>
+                                    <h3>Title : {evryauction?.title}</h3>
+                                    <h4>MSP : {evryauction?.msp / 1000000000000000000} Ether</h4>
                                     <div>
                                         <button style={{ margin: "20px" }}
-                                            onClick={() => startAuction(evryauction.agreeId)}
+                                            onClick={() => startAuction(evryauction?.agreeId)}
                                         >Start Auction
-                                        </button>                                        <button>Participate in auction</button>
+                                        </button>
+                                        <button>Participate in auction</button>
+                                        <div>
+                                            <label>Bid:</label>
+                                            <input type="number"
+                                                onChange={(e) => setBid(e.target.value)}
+                                            />
+                                            <button
+                                                onClick={() => makeAbid(evryauction?.agreeId)}
+                                            >Make a Bid</button>
+                                        </div>
                                     </div>
+
+
                                 </div>
                             </>)
                     })
