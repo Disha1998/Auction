@@ -1,10 +1,12 @@
-const {ethers} = require("hardhat");
+const { ethers } = require("hardhat");
+const { CRYPTODEVS_NFT_CONTRACT_ADDRESS } = require("../constant");
 
-async function main () {
+
+async function main() {
 
   const AuctionEscrow = await ethers.getContractFactory("Auction");
 
-  const Auctionescrow = await AuctionEscrow.deploy();
+  const Auctionescrow = await AuctionEscrow.deploy(CRYPTODEVS_NFT_CONTRACT_ADDRESS);
 
   await Auctionescrow.deployed();
 
@@ -19,4 +21,4 @@ main()
     process.exit(1);
   });
 
-  // Auction contract deployed to 0x0286AE4384C9d8bbeE096486a80A0d4077886925
+  // Auction contract deployed to 0xa7b4061A6fc06f0E55B74e2691EaE222F7f6E49a

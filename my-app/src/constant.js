@@ -1,6 +1,17 @@
-export const AUCTION_ESCROW_CONTRACT_ADDRESS = "0x0286AE4384C9d8bbeE096486a80A0d4077886925";
+export const AUCTION_ESCROW_CONTRACT_ADDRESS = "0xa7b4061A6fc06f0E55B74e2691EaE222F7f6E49a";
 
-export const AUCTION_ESCROW_ABI = [
+export const AUCTION_ESCROW_ABI =  [
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_cryptoDevsNFT",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "constructor"
+  },
   {
     "stateMutability": "payable",
     "type": "fallback"
@@ -49,6 +60,21 @@ export const AUCTION_ESCROW_ABI = [
         "internalType": "uint256",
         "name": "auctionEndTime",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "highestBidder",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "highestBid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "fundsReleased",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -106,13 +132,32 @@ export const AUCTION_ESCROW_ABI = [
         "type": "uint256"
       }
     ],
-    "name": "getHighestBid",
+    "name": "getBidders",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "address[]",
         "name": "",
-        "type": "address"
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
       },
+      {
+        "internalType": "address",
+        "name": "_bidder",
+        "type": "address"
+      }
+    ],
+    "name": "getBids",
+    "outputs": [
       {
         "internalType": "uint256",
         "name": "",
@@ -120,6 +165,19 @@ export const AUCTION_ESCROW_ABI = [
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getHighestBid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -133,6 +191,32 @@ export const AUCTION_ESCROW_ABI = [
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "refundBids",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_auctionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "releaseFunds",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
